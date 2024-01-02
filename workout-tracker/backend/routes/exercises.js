@@ -1,12 +1,8 @@
-import Exercise, {
-  find,
-  findById,
-  findByIdAndDelete,
-} from "../models/exercise.model";
 const router = require("express").Router();
+let Exercise = require("../models/exercise.model");
 
 router.route("/").get((req, res) => {
-  find()
+  Exercise.find()
     .then((exercises) => res.json(exercises))
     .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -31,19 +27,19 @@ router.route("/add").post((req, res) => {
 });
 
 router.route("/:id").get((req, res) => {
-  findById(req.params.id) //will take id from request URL
+  Exercise.findById(req.params.id)
     .then((exercise) => res.json(exercise))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 router.route("/:id").delete((req, res) => {
-  findByIdAndDelete(req.params.id)
+  Exercise.findByIdAndDelete(req.params.id)
     .then(() => res.json("Exercise deleted."))
     .catch((err) => res.status(400).json("Error: " + err));
 });
-//Refactor below to allow updating flexibly
+
 router.route("/update/:id").post((req, res) => {
-  findById(req.params.id)
+  Exercise.findById(req.params.id)
     .then((exercise) => {
       exercise.username = req.body.username;
       exercise.description = req.body.description;
@@ -58,4 +54,4 @@ router.route("/update/:id").post((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-export default router;
+module.exports = router;
